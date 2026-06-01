@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MQ Admin</title>
+<style>
+:root{--g:#085041;--gm:#1d9e75;--gl:#e1f5ee;--gold:#ef9f27;--red:#e53935;--rl:#fdecea;--bg:#f5faf8;--w:#fff;--tx:#1a1a1a;--gr:#5f8a7a;--bd:#d0ece4;--r:12px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
+.scr{display:none;min-height:100vh;flex-direction:column;}
+.scr.on{display:flex;}
+.lw{background:var(--g);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;}
+.l-ico{font-size:56px;margin-bottom:16px;}
+.l-title{font-size:24px;font-weight:800;color:#fff;margin-bottom:6px;}
+.l-sub{font-size:14px;color:#9fe1cb;margin-bottom:28px;}
+.l-inp{background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.22);border-radius:var(--r);padding:14px 18px;font-size:16px;color:#fff;width:100%;max-width:320px;outline:none;margin-bottom:12px;}
+.l-inp::placeholder{color:rgba(255,255,255,.4);}
+.l-btn{background:var(--gold);color:#3d2000;border:none;border-radius:var(--r);padding:15px;font-size:16px;font-weight:700;cursor:pointer;width:100%;max-width:320px;}
+.hdr{background:var(--g);padding:14px 17px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+.hdr-t{font-size:15px;font-weight:700;color:#fff;flex:1;}
+.hdr-out{color:#9fe1cb;font-size:13px;cursor:pointer;padding:4px 10px;border:1px solid rgba(255,255,255,.2);border-radius:8px;}
+.tabs{display:flex;background:var(--w);border-bottom:1px solid var(--bd);overflow-x:auto;}
+.tab{flex:1;min-width:80px;padding:12px 8px;font-size:12px;font-weight:600;color:var(--gr);text-align:center;cursor:pointer;border-bottom:2.5px solid transparent;white-space:nowrap;}
+.tab.on{color:var(--g);border-bottom-color:var(--g);}
+.cont{flex:1;padding:16px;overflow-y:auto;}
+.card{background:var(--w);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(8,80,65,.08);}
+.card-t{font-size:14px;font-weight:700;margin-bottom:12px;}
+.sgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.si{background:var(--bg);border-radius:10px;padding:12px;text-align:center;}
+.sn{font-size:24px;font-weight:800;color:var(--g);}
+.sl{font-size:11px;color:var(--gr);margin-top:2px;}
+.inp{background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;padding:11px 14px;font-size:14px;color:var(--tx);width:100%;outline:none;margin-bottom:10px;}
+.inp:focus{border-color:var(--gm);}
+.btn{background:var(--g);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-bottom:8px;}
+.btn.gold{background:var(--gold);color:#3d2000;}
+.btn.red{background:var(--red);color:#fff;}
+.btn.sm{width:auto;padding:7px 13px;font-size:12px;}
+.pr-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:10px;margin-bottom:6px;}
+.pr-code{font-size:15px;font-weight:700;font-family:monospace;flex:1;letter-spacing:.05em;}
+.pr-status{font-size:11px;color:var(--gr);}
+.pr-del{background:var(--rl);color:var(--red);border:none;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;}
+.sw-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bd);}
+.sw-row:last-child{border-bottom:none;}
+.sw-lbl{font-size:14px;font-weight:600;}
+.sw-sub{font-size:12px;color:var(--gr);margin-top:2px;}
+.tog{width:44px;height:26px;background:var(--bd);border-radius:13px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;}
+.tog.on{background:var(--gm);}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s;}
+.tog.on::after{left:21px;}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;background:var(--gl);color:var(--g);}
+.alert{background:var(--gl);border-radius:10px;padding:12px;font-size:13px;color:var(--g);margin-bottom:10px;}
+.hidden{display:none!important;}
+.sp{height:20px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="s-login" class="scr on">
+<div class="lw">
+  <div class="l-ico">🔐</div>
+  <div class="l-title">MQ Admin Panel</div>
+  <div class="l-sub">Тек администраторларға арналған<br>Только для администраторов</div>
+  <input class="l-inp" id="a-login" type="text" placeholder="Логин" autocapitalize="none" autocomplete="username">
+  <input class="l-inp" id="a-pass" type="password" placeholder="Пароль" autocomplete="current-password">
+  <button class="l-btn" onclick="doLogin()">Кіру →</button>
+</div>
+</div>
+
+<!-- ADMIN -->
+<div id="s-admin" class="scr">
+<div class="hdr">
+  <div class="hdr-t">⚙️ MQ Admin</div>
+  <div class="hdr-out" onclick="logout()">Шығу</div>
+</div>
+<div class="tabs">
+  <div class="tab on" id="tab-stats" onclick="setTab('stats')">📊 Статистика</div>
+  <div class="tab" id="tab-promos" onclick="setTab('promos')">🎫 Промокод</div>
+  <div class="tab" id="tab-settings" onclick="setTab('settings')">⚙️ Баптау</div>
+</div>
+
+<!-- STATS -->
+<div id="tp-stats" class="cont">
+  <div class="alert">💡 Бұл adminке арналған деректер. Оқушылар бұл бетті көрмейді.</div>
+  <div class="card">
+    <div class="card-t">📊 Жалпы статистика</div>
+    <div class="sgrid">
+      <div class="si"><div class="sn" id="st-total">0</div><div class="sl">Барлық промокод</div></div>
+      <div class="si"><div class="sn" id="st-used">0</div><div class="sl">Белсендірілген</div></div>
+      <div class="si"><div class="sn" id="st-income">0</div><div class="sl">Табыс (₸)</div></div>
+      <div class="si"><div class="sn" id="st-free">3</div><div class="sl">Тегін күн</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-t">💰 Табыс есебі</div>
+    <div style="font-size:13px;color:var(--gr);line-height:2;" id="income-detail">-</div>
+  </div>
+  <div class="card">
+    <div class="card-t">🔗 Платформа сілтемелері</div>
+    <div style="font-size:13px;line-height:2.2;">
+      🎓 Оқушы:<br>
+      <a href="https://mektepkeqadam.github.io/school" style="color:var(--gm);word-break:break-all;">mektepkeqadam.github.io/school</a><br>
+      ⚙️ Админ:<br>
+      <a href="https://mektepkeqadam.github.io/admin" style="color:var(--gm);word-break:break-all;">mektepkeqadam.github.io/admin</a>
+    </div>
+  </div>
+  <div class="sp"></div>
+</div>
+
+<!-- PROMOS -->
+<div id="tp-promos" class="cont hidden">
+  <div class="card">
+    <div class="card-t">➕ Жаңа промокод қосу</div>
+    <input class="inp" id="new-promo" type="text" placeholder="Промокод (мысалы: MQ001)" autocapitalize="characters" maxlength="20">
+    <button class="btn gold" onclick="addPromo()">Промокод қосу ✓</button>
+    <div style="font-size:12px;color:var(--gr);margin-bottom:8px;">Автоматты жасау:</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn sm" onclick="genPromo(1)">1 промокод</button>
+      <button class="btn sm" onclick="genPromo(5)">5 промокод</button>
+      <button class="btn sm" onclick="genPromo(10)">10 промокод</button>
+      <button class="btn sm" onclick="genPromo(20)">20 промокод</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-t">🎫 Промокодтар тізімі <span class="badge" id="promo-count">0</span></div>
+    <div id="promo-list"></div>
+  </div>
+  <div class="sp"></div>
+</div>
+
+<!-- SETTINGS -->
+<div id="tp-settings" class="cont hidden">
+  <div class="card">
+    <div class="card-t">💳 Kaspi QR + WhatsApp</div>
+    <div style="font-size:12px;color:var(--gr);margin-bottom:6px;">Kaspi Pay сілтемесі:</div>
+    <input class="inp" id="kaspi-url" type="text" placeholder="https://kaspi.kz/pay/...">
+    <div style="font-size:12px;color:var(--gr);margin-bottom:6px;">WhatsApp нөмірі:</div>
+    <input class="inp" id="wa-num" type="text" placeholder="+77001234567">
+    <div style="font-size:12px;color:var(--gr);margin-bottom:6px;">Платформа бағасы (₸):</div>
+    <input class="inp" id="price-val" type="number" placeholder="4990" value="4990">
+    <div style="font-size:12px;color:var(--gr);margin-bottom:6px;">WhatsApp хабар мәтіні:</div>
+    <input class="inp" id="wa-msg" type="text" placeholder="Сәлем! MektepkeQadam туралы сұрағым бар.">
+    <button class="btn gold" onclick="saveCfg()">Сақтау ✓</button>
+  </div>
+  <div class="card">
+    <div class="card-t">⚙️ Платформа баптаулары</div>
+    <div class="sw-row">
+      <div><div class="sw-lbl">Тегін кіру режимі</div><div class="sw-sub">Барлық модульдер тегін ашық</div></div>
+      <div class="tog" id="tog-free" onclick="toggleS('free')"></div>
+    </div>
+    <div class="sw-row">
+      <div><div class="sw-lbl">Жаңа тіркелу</div><div class="sw-sub">Жаңа пайдаланушылар кіре алады</div></div>
+      <div class="tog on" id="tog-reg" onclick="toggleS('reg')"></div>
+    </div>
+    <div class="sw-row">
+      <div><div class="sw-lbl">Kaspi батырмасын көрсету</div><div class="sw-sub">Float батырмалар профильде</div></div>
+      <div class="tog on" id="tog-kaspi" onclick="toggleS('kaspi')"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-t">🔐 Пароль өзгерту</div>
+    <input class="inp" id="new-pass" type="password" placeholder="Жаңа пароль">
+    <input class="inp" id="new-pass2" type="password" placeholder="Қайталаңыз">
+    <button class="btn" onclick="changePass()">Пароль өзгерту</button>
+  </div>
+  <div class="sp"></div>
+</div>
+</div>
+
+<script>
+const DEF_LOGIN='admin',DEF_PASS='mq2026admin';
+function getCreds(){return JSON.parse(localStorage.getItem('mq_admin_creds')||JSON.stringify({login:DEF_LOGIN,pass:DEF_PASS}));}
+function getPromos(){return JSON.parse(localStorage.getItem('mq_extra_promos')||'[]');}
+function savePromos(p){localStorage.setItem('mq_extra_promos',JSON.stringify(p));}
+function getCfg(){return JSON.parse(localStorage.getItem('mq_cfg')||'{}');}
+function saveCfgData(c){localStorage.setItem('mq_cfg',JSON.stringify(c));}
+function getSettings(){return JSON.parse(localStorage.getItem('mq_settings')||'{"free":false,"reg":true,"kaspi":true}');}
+function saveSettings(s){localStorage.setItem('mq_settings',JSON.stringify(s));}
+
+function doLogin(){
+  const login=document.getElementById('a-login').value.trim();
+  const pass=document.getElementById('a-pass').value;
+  const c=getCreds();
+  if(login===c.login&&pass===c.pass){
+    sessionStorage.setItem('mq_admin','1');
+    initAdmin();
+    document.getElementById('s-login').classList.remove('on');
+    document.getElementById('s-admin').classList.add('on');
+  } else {
+    document.getElementById('a-pass').style.borderColor='var(--red)';
+    document.getElementById('a-pass').value='';
+    document.getElementById('a-pass').placeholder='❌ Қате!';
+    setTimeout(()=>{document.getElementById('a-pass').style.borderColor='';document.getElementById('a-pass').placeholder='Пароль';},1500);
+  }
+}
+function logout(){sessionStorage.removeItem('mq_admin');document.getElementById('s-admin').classList.remove('on');document.getElementById('s-login').classList.add('on');}
+
+function initAdmin(){
+  const promos=getPromos();
+  const used=promos.filter(p=>p.used).length;
+  const cfg=getCfg();
+  const price=cfg.price||4990;
+  document.getElementById('st-total').textContent=promos.length;
+  document.getElementById('st-used').textContent=used;
+  document.getElementById('st-income').textContent=(used*price).toLocaleString();
+  document.getElementById('income-detail').innerHTML=
+    `Жалпы промокод: ${promos.length}<br>Белсендірілген: ${used}<br>Орташа баға: ${price.toLocaleString()} ₸<br><strong>Жалпы табыс: ${(used*price).toLocaleString()} ₸</strong>`;
+  renderPromos();
+  const s=getSettings();
+  ['free','reg','kaspi'].forEach(k=>document.getElementById('tog-'+k).classList.toggle('on',s[k]!==false));
+  document.getElementById('kaspi-url').value=cfg.kaspiUrl||'';
+  document.getElementById('wa-num').value=cfg.waNumber||'';
+  document.getElementById('price-val').value=cfg.price||4990;
+  document.getElementById('wa-msg').value=cfg.waMessage||'Сәлем! MektepkeQadam туралы сұрағым бар.';
+}
+
+function renderPromos(){
+  const promos=getPromos();
+  document.getElementById('promo-count').textContent=promos.length;
+  const list=document.getElementById('promo-list');
+  if(promos.length===0){list.innerHTML='<div style="font-size:13px;color:var(--gr);text-align:center;padding:16px;">Промокод жоқ.</div>';return;}
+  list.innerHTML=promos.map((p,i)=>`
+    <div class="pr-row">
+      <div style="flex:1">
+        <div class="pr-code">${p.code}</div>
+        <div class="pr-status">${p.used?'✅ Белсендірілді · '+(new Date(p.usedAt||p.created).toLocaleDateString()):'⏳ Күтуде · '+(new Date(p.created).toLocaleDateString())}</div>
+      </div>
+      <button class="pr-del" onclick="delPromo(${i})">🗑</button>
+    </div>`).join('');
+}
+
+function addPromo(){
+  const code=document.getElementById('new-promo').value.trim().toUpperCase();
+  if(!code){alert('Промокод жазыңыз');return;}
+  const promos=getPromos();
+  if(promos.find(p=>p.code===code)){alert('Бұл промокод бар!');return;}
+  promos.push({code,used:false,created:Date.now()});
+  savePromos(promos);
+  document.getElementById('new-promo').value='';
+  renderPromos();initAdmin();
+}
+function genPromo(n){
+  const promos=getPromos();
+  for(let i=0;i<n;i++){
+    const code='MQ'+Date.now().toString(36).toUpperCase().slice(-4)+Math.random().toString(36).substring(2,4).toUpperCase();
+    promos.push({code,used:false,created:Date.now()});
+  }
+  savePromos(promos);renderPromos();initAdmin();
+}
+function delPromo(i){
+  if(!confirm('Жоясыз ба?'))return;
+  const promos=getPromos();promos.splice(i,1);savePromos(promos);renderPromos();initAdmin();
+}
+function saveCfg(){
+  saveCfgData({
+    kaspiUrl:document.getElementById('kaspi-url').value.trim(),
+    waNumber:document.getElementById('wa-num').value.trim(),
+    price:parseInt(document.getElementById('price-val').value)||4990,
+    waMessage:document.getElementById('wa-msg').value.trim(),
+  });
+  alert('✅ Сақталды!');initAdmin();
+}
+function toggleS(k){const s=getSettings();s[k]=!s[k];saveSettings(s);document.getElementById('tog-'+k).classList.toggle('on',s[k]);}
+function changePass(){
+  const p1=document.getElementById('new-pass').value;
+  const p2=document.getElementById('new-pass2').value;
+  if(!p1){alert('Пароль жазыңыз');return;}
+  if(p1!==p2){alert('Парольдер сәйкес емес!');return;}
+  const c=getCreds();c.pass=p1;
+  localStorage.setItem('mq_admin_creds',JSON.stringify(c));
+  document.getElementById('new-pass').value='';document.getElementById('new-pass2').value='';
+  alert('✅ Пароль өзгертілді!');
+}
+function setTab(tab){
+  ['stats','promos','settings'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('on',t===tab);
+    document.getElementById('tp-'+t).classList.toggle('hidden',t!==tab);
+  });
+}
+window.addEventListener('load',()=>{
+  if(sessionStorage.getItem('mq_admin')==='1'){initAdmin();document.getElementById('s-login').classList.remove('on');document.getElementById('s-admin').classList.add('on');}
+});
+</script>
+</body>
+</html>
