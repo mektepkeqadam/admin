@@ -230,7 +230,7 @@ async function deletePromoFromDB(code){
 function getCfg(){return JSON.parse(localStorage.getItem('mq_cfg')||'{}');}
 function saveCfgData(c){localStorage.setItem('mq_cfg',JSON.stringify(c));}
 
-function doLogin(){
+async function doLogin(){
   const login=document.getElementById('a-login').value.trim();
   const pass=document.getElementById('a-pass').value;
   const c=getCreds();
@@ -330,7 +330,7 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2000);
 }
 
-function addPromo(){
+async function addPromo(){
   const code=document.getElementById('new-promo').value.trim().toUpperCase();
   if(!code){alert('Промокод жазыңыз');return;}
   const promos=getPromos();
@@ -343,7 +343,7 @@ function addPromo(){
   showToast(code+' қосылды!');
 }
 
-function genPromo(n){
+async function genPromo(n){
   const promos=getPromos();
   const newCodes=[];
   for(let i=0;i<n;i++){
@@ -357,7 +357,7 @@ function genPromo(n){
   showToast(n+' промокод жасалды!');
 }
 
-function delPromo(i){
+async function delPromo(i){
   if(!confirm('Жоясыз ба?'))return;
   const promos=getPromos();
   const code=promos[i]?.code;
@@ -367,7 +367,7 @@ function delPromo(i){
   renderPromos();initAdmin();
 }
 
-function saveCfg(){
+async function saveCfg(){
   saveCfgData({
     kaspiUrl:document.getElementById('kaspi-url').value.trim(),
     waNumber:document.getElementById('wa-num').value.trim(),
