@@ -186,10 +186,9 @@ const SB_URL='https://nfmdtzgybvbpfurxsyhh.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mbWR0emd5YnZicGZ1cnhzeWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNzI2MjgsImV4cCI6MjA5NTk0ODYyOH0.ob7J6Rz4NDzweEg2VgQO5sJksOCwh0zDp2Da1TKFooE';
 
 async function sbFetch(path,method='GET',body=null){
-  const opts={method,headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'}};
-  if(body)opts.body=JSON.stringify(body);
-  try{const r=await fetch(SB_URL+'/rest/v1/'+path,opts);if(r.ok){const t=await r.text();return t?JSON.parse(t):[];}return [];}
-  catch(e){return [];}
+  // Supabase allowlist шешілгенше localStorage қолданамыз
+  // TODO: allowlist шешілгеннен кейін қосу
+  return [];
 }
 
 const STORAGE_KEY='mq_admin_promos';
