@@ -6,6 +6,20 @@
 <title>CardioLife 🫀</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+<!-- ===== SUPABASE (база данных + авторизация) ===== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ВСТАВЬТЕ СЮДА данные из Supabase → Project Settings → API.
+  // anon-ключ публичный — его безопасно держать в коде (защищён правилами доступа к базе).
+  window.SUPABASE_URL = 'ВАШ_PROJECT_URL';
+  window.SUPABASE_ANON_KEY = 'ВАШ_ANON_KEY';
+
+  window.sb = (window.supabase && String(window.SUPABASE_URL).startsWith('http'))
+    ? window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY)
+    : null;
+  if (!window.sb) console.warn('Supabase ещё не настроен — вставьте URL и anon key.');
+</script>
+
 <!-- ROUTER BASE STYLE -->
 <style>
 #app-patient { display: block; }
