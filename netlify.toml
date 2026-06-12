@@ -1,0 +1,6 @@
+# Конфигурация Netlify для CardioLife.
+# Сайт — статический (index.html в корне), плюс одна serverless-функция-прокси.
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
