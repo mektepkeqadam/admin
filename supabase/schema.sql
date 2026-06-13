@@ -1,18 +1,16 @@
 -- CardioLife — структура базы данных (Supabase / PostgreSQL)
+-- БЕЗОПАСНО для общего / существующего проекта: все объекты с префиксом cardio_,
+-- ничего чужого не трогаем и не удаляем.
 --
 -- КАК ПРИМЕНИТЬ:
--- 1. Откройте свой проект на supabase.com
+-- 1. Откройте нужный проект на supabase.com
 -- 2. Слева: SQL Editor → New query
--- 3. Вставьте сюда весь этот файл целиком → Run
---
--- Это создаёт таблицы пользователей и анализов и настраивает безопасный
--- доступ (Row Level Security): каждый пациент видит только свои данные,
--- а врач (роль 'doctor') видит всё.
+-- 3. Вставьте этот файл целиком → Run (должно написать Success)
 
 -- ========================================================================
--- ПРОФИЛИ ПОЛЬЗОВАТЕЛЕЙ
+-- ПРОФИЛИ ПОЛЬЗОВАТЕЛЕЙ CardioLife
 -- ========================================================================
-create table if not exists public.profiles (
+create table if not exists public.cardio_profiles (
   id         uuid primary key references auth.users(id) on delete cascade,
   full_name  text,
   phone      text,
@@ -20,61 +18,61 @@ create table if not exists public.profiles (
   created_at timestamptz not null default now()
 );
 
-alter table public.profiles enable row level security;
+alter table public.cardio_profiles enable row level security;
 
--- Проверка «текущий пользователь — врач?».
--- SECURITY DEFINER читает таблицу в обход RLS, чтобы не было рекурсии в политиках.
-create or replace function public.is_doctor()
+-- «Текущий пользователь — врач?» (security definer — без рекурсии в политиках)
+create or replace function public.cardio_is_doctor()
 returns boolean
 language sql
 security definer
 set search_path = public
 as $$
   select exists (
-    select 1 from public.profiles
+    select 1 from public.cardio_profiles
     where id = auth.uid() and role = 'doctor'
   );
 $$;
 
-drop policy if exists "profiles_select" on public.profiles;
-create policy "profiles_select" on public.profiles
-  for select using (auth.uid() = id or public.is_doctor());
+drop policy if exists "cardio_profiles_select" on public.cardio_profiles;
+create policy "cardio_profiles_select" on public.cardio_profiles
+  for select using (auth.uid() = id or public.cardio_is_doctor());
 
-drop policy if exists "profiles_insert_own" on public.profiles;
-create policy "profiles_insert_own" on public.profiles
+drop policy if exists "cardio_profiles_insert_own" on public.cardio_profiles;
+create policy "cardio_profiles_insert_own" on public.cardio_profiles
   for insert with check (auth.uid() = id);
 
-drop policy if exists "profiles_update_own" on public.profiles;
-create policy "profiles_update_own" on public.profiles
+drop policy if exists "cardio_profiles_update_own" on public.cardio_profiles;
+create policy "cardio_profiles_update_own" on public.cardio_profiles
   for update using (auth.uid() = id);
 
--- Автоматически создавать профиль при регистрации.
-create or replace function public.handle_new_user()
+-- Автосоздание профиля при регистрации (уникальное имя триггера — чужие не трогаем)
+create or replace function public.cardio_handle_new_user()
 returns trigger
 language plpgsql
 security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name, phone)
+  insert into public.cardio_profiles (id, full_name, phone)
   values (
     new.id,
     new.raw_user_meta_data ->> 'full_name',
     new.raw_user_meta_data ->> 'phone'
-  );
+  )
+  on conflict (id) do nothing;
   return new;
 end;
 $$;
 
-drop trigger if exists on_auth_user_created on auth.users;
-create trigger on_auth_user_created
+drop trigger if exists on_auth_user_created_cardio on auth.users;
+create trigger on_auth_user_created_cardio
   after insert on auth.users
-  for each row execute function public.handle_new_user();
+  for each row execute function public.cardio_handle_new_user();
 
 -- ========================================================================
 -- АНАЛИЗЫ (ЭКГ / ЭхоКГ / кровь)
 -- ========================================================================
-create table if not exists public.analyses (
+create table if not exists public.cardio_analyses (
   id             uuid primary key default gen_random_uuid(),
   patient_id     uuid not null references auth.users(id) on delete cascade,
   type           text not null,                   -- 'ecg' | 'echo' | 'blood'
@@ -86,25 +84,25 @@ create table if not exists public.analyses (
   reviewed_at    timestamptz
 );
 
-alter table public.analyses enable row level security;
+alter table public.cardio_analyses enable row level security;
 
-drop policy if exists "analyses_select" on public.analyses;
-create policy "analyses_select" on public.analyses
-  for select using (auth.uid() = patient_id or public.is_doctor());
+drop policy if exists "cardio_analyses_select" on public.cardio_analyses;
+create policy "cardio_analyses_select" on public.cardio_analyses
+  for select using (auth.uid() = patient_id or public.cardio_is_doctor());
 
-drop policy if exists "analyses_insert_own" on public.analyses;
-create policy "analyses_insert_own" on public.analyses
+drop policy if exists "cardio_analyses_insert_own" on public.cardio_analyses;
+create policy "cardio_analyses_insert_own" on public.cardio_analyses
   for insert with check (auth.uid() = patient_id);
 
-drop policy if exists "analyses_doctor_update" on public.analyses;
-create policy "analyses_doctor_update" on public.analyses
-  for update using (public.is_doctor());
+drop policy if exists "cardio_analyses_doctor_update" on public.cardio_analyses;
+create policy "cardio_analyses_doctor_update" on public.cardio_analyses
+  for update using (public.cardio_is_doctor());
 
 -- ========================================================================
 -- НАЗНАЧИТЬ ВРАЧА
--- После того как Dr. Севара зарегистрируется обычным образом, выполните
--- (подставив её email вместо примера), чтобы дать ей роль врача:
+-- После того как Dr. Севара зарегистрируется в приложении, выполните
+-- (подставив её email), чтобы дать ей роль врача:
 --
---   update public.profiles set role = 'doctor'
+--   update public.cardio_profiles set role = 'doctor'
 --   where id = (select id from auth.users where email = 'sevara@cardiolife.kz');
 -- ========================================================================
