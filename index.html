@@ -1684,7 +1684,7 @@ window.goPatient = function() {
       Посмотреть демо-дашборд
     </button>
     <button class="btn btn-ghost" onclick="showScreen('subscribe')">
-      Тарифы и подписка
+      Тарифы · консультация
     </button>
   </div>
 </div>
@@ -1832,7 +1832,7 @@ window.goPatient = function() {
 
     <div class="result-cta">
       <button class="btn btn-primary" onclick="showScreen('subscribe')">
-        🛡️ Мониторинг 365 дней — 5 000 тг/мес
+        👩‍⚕️ Консультация Dr. Севары
       </button>
       <button class="btn btn-secondary" onclick="showScreen('dashboard')">
         Открыть мой дашборд
@@ -1954,7 +1954,7 @@ window.goPatient = function() {
 
     <div style="padding:0 24px 12px;">
       <button class="btn btn-primary" onclick="showScreen('subscribe')">
-        🛡️ Продлить подписку · 5 000 тг/мес
+        👩‍⚕️ Записаться к Dr. Севаре
       </button>
     </div>
   </div>
@@ -1972,43 +1972,39 @@ window.goPatient = function() {
 <div class="screen" id="subscribe">
   <div class="sub-header">
     <button class="back-btn" onclick="history.back()">←</button>
-    <div class="screen-title">Выберите план</div>
+    <div class="screen-title">Тарифы</div>
   </div>
 
   <div class="scroll-body">
-    <div class="plan-card">
-      <div class="plan-name">Базовый</div>
-      <div class="plan-price">Бесплатно <span>навсегда</span></div>
-      <ul class="plan-features">
-        <li>Тест сердца раз в месяц</li>
-        <li>CardioLife Index</li>
-        <li>Базовые рекомендации</li>
-      </ul>
-    </div>
-
     <div class="plan-card featured">
-      <div class="plan-badge">★ Популярный</div>
-      <div class="plan-name">Кардио 365</div>
-      <div class="plan-price">5 000 тг <span>/ месяц</span></div>
+      <div class="plan-badge">★ Сейчас бесплатно</div>
+      <div class="plan-name">Приложение CardioLife</div>
+      <div class="plan-price">Бесплатно <span>для всех</span></div>
       <ul class="plan-features">
-        <li>Ежедневный мониторинг давления</li>
-        <li>Семейный контроль (до 5 человек)</li>
-        <li>ИИ-уведомления при росте риска</li>
-        <li>Напоминания о лекарствах</li>
-        <li>Консультация Dr. Севары — 1 в месяц</li>
-        <li>CardioLife Index каждый день</li>
+        <li>Тест сердца и CardioLife Index</li>
+        <li>Загрузка ЭКГ / ЭхоКГ / анализов + ИИ-разбор</li>
+        <li>Чат с ИИ-ассистентом Dr. Севары</li>
+        <li>Академия сердца — курсы и нормы</li>
+        <li>Семейный контроль</li>
       </ul>
     </div>
 
     <div class="plan-card">
-      <div class="plan-name">Премиум</div>
-      <div class="plan-price">12 000 тг <span>/ месяц</span></div>
+      <div class="plan-name">Консультация Dr. Севары</div>
+      <div class="plan-price">5 000 тг <span>/ приём</span></div>
       <ul class="plan-features">
-        <li>Всё из плана Кардио 365</li>
-        <li>Безлимитные консультации</li>
-        <li>Приоритетный ответ за 30 минут</li>
-        <li>Анти-эйдж программа от Dr. Севары</li>
-        <li>Персональный план питания</li>
+        <li>Онлайн-консультация кардиолога — 30 мин</li>
+        <li>Разбор ваших анализов и заключение</li>
+        <li>Персональные рекомендации</li>
+      </ul>
+    </div>
+
+    <div class="plan-card">
+      <div class="plan-name">Анти-эйдж программа</div>
+      <div class="plan-price">8 000 тг <span>/ приём</span></div>
+      <ul class="plan-features">
+        <li>Расширенная консультация — 60 мин</li>
+        <li>Программа молодости и план питания</li>
       </ul>
     </div>
 
@@ -2019,11 +2015,11 @@ window.goPatient = function() {
     </div>
 
     <div class="sub-footer">
-      <button class="btn btn-primary" onclick="showScreen('success')">
-        Начать — 5 000 тг / мес
+      <button class="btn btn-primary" onclick="showScreen('consult-screen')">
+        Записаться на консультацию →
       </button>
       <div style="text-align:center; margin-top:12px; font-size:12px; color:var(--muted);">
-        Отмена в любое время · Безопасная оплата · Kaspi Pay
+        Приложение бесплатно · оплата только за приём · Kaspi Pay
       </div>
     </div>
   </div>
@@ -2034,7 +2030,7 @@ window.goPatient = function() {
   <div style="max-width:340px; margin:auto;">
     <div class="success-icon">✅</div>
     <div class="success-title">Добро пожаловать в CardioLife!</div>
-    <div class="success-sub">Ваша подписка активирована.<br>Dr. Севара уже видит ваш профиль.<br>Начните вводить показатели прямо сейчас.</div>
+    <div class="success-sub">Готово! Dr. Севара уже видит ваш профиль.<br>Начните вводить показатели прямо сейчас.</div>
     <button class="btn btn-primary" onclick="showScreen('dashboard')">Открыть дашборд 🫀</button>
   </div>
 </div>
@@ -3467,7 +3463,7 @@ renderHistory();
 
     <div style="padding:0 24px 12px;">
       <button class="btn btn-primary" onclick="showScreen('subscribe')">
-        🌿 Премиум — все курсы + программа · 12 000 тг
+        🌿 Все курсы открыты — бесплатно
       </button>
     </div>
 
@@ -4039,7 +4035,7 @@ document.querySelectorAll('#dashboard .bottom-nav .nav-item, #ecg-screen .bottom
             <div class="alert-title">Чат с врачом</div>
             <div class="alert-desc">Задайте вопрос — ответ в течение 2 часов</div>
           </div>
-          <div style="margin-left:auto;font-size:13px;font-weight:700;color:var(--green);">Входит в подписку</div>
+          <div style="margin-left:auto;font-size:13px;font-weight:700;color:var(--green);">Бесплатно</div>
         </div>
 
         <div class="alert-card" style="cursor:pointer;">
@@ -4598,7 +4594,7 @@ if (typeof origRenderECG === 'function') {
     <div class="card" style="margin:0 24px;">
       <div class="patient-row" onclick="openPatientCard('aliya')">
         <div class="pat-ava">👩</div>
-        <div><div class="pat-name">Алия Нурмаганова</div><div class="pat-sub">38 лет · Подписка активна</div></div>
+        <div><div class="pat-name">Алия Нурмаганова</div><div class="pat-sub">38 лет · Пациент</div></div>
         <div class="pat-index" style="color:var(--green);">82</div>
       </div>
       <div class="patient-row" onclick="openPatientCard('bekzod')">
